@@ -1,5 +1,6 @@
 ﻿@page
-@model IndexModel
+@using WebApp.Pages
+@model WebApp.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -19,18 +20,28 @@
         <img id='img-original'/>
     </div>
 </div>
-<div id="compare" class="col-md-6">
-    <div class="form-group">
-        <label>Compare Second Image</label>
-        <div class="input-group">
-            <span class="input-group-btn">
-                <span class="btn btn-default btn-file">
-                    Browse… <input type="file" id="imgCompare">
+    <div id="compare" class="col-md-6">
+        <div class="form-group">
+            <label>Compare Second Image</label>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-default btn-file">
+                        Browse… <input type="file" id="imgCompare">
+                    </span>
                 </span>
-            </span>
-            <input type="text" class="form-control" readonly>
+                <input type="text" class="form-control" readonly>
+            </div>
+            <img id='img-compare'/>
         </div>
-        <img id='img-compare'/>
     </div>
-</div>
+    
+    <div>
+        <span>
+            <button class="col-md-offset-6">Compare</button>
+        </span>
+    </div>
+    <div class="alert  alert-info">
+        <h4 class="alert-heading">Result:</h4>
+        <p id="alertText" class="mb-0"> <a href="#" class="alert-link"></a>.</p>
+    </div>
 </div>
