@@ -52,7 +52,7 @@ $(document).ready(function() {
                 headers: {
                     "Content-Type": "application/octet-stream"
                 },
-                body: JSON.stringify(image)
+                body: image
             })
             .then(function(data) {
                 console.log("Request success: ", data);
