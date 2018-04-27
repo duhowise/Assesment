@@ -1,4 +1,6 @@
 ﻿// Write your Javascript code.
+var validIds=[];
+
 $(document).ready(function() {
     var originalFaceId = null;
     var compareFaceId = null;
@@ -37,32 +39,24 @@ $(document).ready(function() {
             })
             .then(function(data) {
                 console.log("Request success: ", data);
+                return data.json();
+            }).then(function(json) {
+                // var result= JSON.stringify(json);
+                    json.forEach(element => {
+                validIds.push(element.faceId);
+                        
+                    });
+
+                console.log(validIds);
             })
             .catch(function(error) {
                 console.log("Request failure: ", error);
-            });
+        });
 
 
     }
 
-    function getFaceIdLocal(image) {
-        fetch("/api/face/detect",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/octet-stream"
-                },
-                body: image
-            })
-            .then(function(data) {
-                console.log("Request success: ", data);
-            })
-            .catch(function(error) {
-                console.log("Request failure: ", error);
-            });
-
-
-    }
+  
 
 
     function readOriginalUrl(input) {
@@ -71,9 +65,7 @@ $(document).ready(function() {
             reader.readAsDataURL(input.files[0]);
             reader.onload = function(e) {
                 $("#img-original").attr("src", e.target.result);
-
-            //var imageData = e.target.result.split(",")[1];
-               var faceId = getFaceId(input.files[0]);
+               getFaceId(input.files[0]);
             };
 
         }
@@ -87,8 +79,7 @@ $(document).ready(function() {
 
             reader.onload = function(e) {
                 $("#img-compare").attr("src", e.target.result);
-                var imageData = e.target.result.split(",")[1];
-                var faceId = getFaceId(imageData);
+                 getFaceId(input.files[0]);                
             };
             reader.readAsDataURL(input.files[0]);
 
