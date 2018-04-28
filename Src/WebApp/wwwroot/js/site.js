@@ -13,6 +13,11 @@ $(document).ready(function() {
 
         });
 
+    $("#comparer").on("click",
+        function() {
+            compare(validIds);
+        });
+
     $(".btn-file :file").on("fileselect",
         function(event, label) {
 
@@ -54,18 +59,62 @@ $(document).ready(function() {
         });
 
 
+    } function compare(valids) {
+        fetch("https://westcentralus.api.cognitive.microsoft.com/face/v1.0/verify",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
+                },
+                body: JSON.stringify({faceId1:valids[1], faceId2:valids[2],faceId:valids[0]})
+            })
+            .then(function(data) {
+                console.log("Request success: ", data);
+                return data.json();
+            }).then(function(json) {
+                $("#alertText").text(JSON.stringify(json));
+
+                console.log(validIds);
+            })
+            .catch(function(error) {
+                console.log("Request failure: ", error);
+        });
+
+
     }
 
-  
+   function addToFacelist(image) {
+        fetch("https://westcentralus.api.cognitive.microsoft.com/face/v1.0/facelists/aweome_face_list/persistedFaces",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/octet-stream",
+                    "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
+                },
+                body: image
+            })
+            .then(function(data) {
+                console.log("Request success: ", data);
+                return data.json();
+            }).then(function(json) {
+                console.log(json);
+            })
+            .catch(function(error) {
+                console.log("Request failure: ", error);
+        });
 
 
+    }
     function readOriginalUrl(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.readAsDataURL(input.files[0]);
             reader.onload = function(e) {
                 $("#img-original").attr("src", e.target.result);
-               getFaceId(input.files[0]);
+             originalFaceId=  getFaceId(input.files[0]);
+                console.log(originalFaceId);
+               //addToFacelist(input.files[0]);
             };
 
         }
