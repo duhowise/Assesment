@@ -1,8 +1,8 @@
 ﻿// Write your Javascript code.
 var validIds=[];
+var originalImage = null;
 
 $(document).ready(function() {
-    var originalFaceId = null;
     var compareFaceId = null;
     $(document).on("change",
         ".btn-file :file",
@@ -18,7 +18,7 @@ $(document).ready(function() {
             compare(validIds);
         });
 
-    $(".btn-file :file").on("fileselect",
+   $(".btn-file :file").on("fileselect",
         function(event, label) {
 
             var input = $(this).parents(".input-group").find(":text"),
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
         });
 
-    function getFaceId(image) {
+   function getFaceId(image) {
         fetch("https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect",
             {
                 method: "POST",
@@ -52,14 +52,18 @@ $(document).ready(function() {
                         
                     });
 
+
                 console.log(validIds);
+
+
             })
             .catch(function(error) {
                 console.log("Request failure: ", error);
         });
 
-
-    } function compare(valids) {
+    } 
+    
+   function compare(valids) {
         fetch("https://westcentralus.api.cognitive.microsoft.com/face/v1.0/verify",
             {
                 method: "POST",
@@ -67,7 +71,7 @@ $(document).ready(function() {
                     "Content-Type": "application/json",
                     "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
                 },
-                body: JSON.stringify({faceId1:valids[1], faceId2:valids[2],faceId:valids[0]})
+                body: JSON.stringify({faceId1:valids[1], faceId2:valids[2],faceId:valids[0],personGroupId:"aweome_face_list"})
             })
             .then(function(data) {
                 console.log("Request success: ", data);
@@ -105,37 +109,65 @@ $(document).ready(function() {
         });
 
 
-    }
-    function readOriginalUrl(input) {
+   }
+    
+   function addToPersonGroup(image,id) {
+        fetch("https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/aweome_face_list/persons/"+id+"/persistedFaces",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/octet-stream",
+                    "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
+                },
+                body: image
+            })
+            .then(function(data) {
+                console.log("Request success: ", data);
+                return data.json();
+            }).then(function(json) {
+                console.log(json);
+            })
+            .catch(function(error) {
+                console.log("Request failure: ", error);
+            });
+
+
+   }
+
+   function readOriginalUrl(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.readAsDataURL(input.files[0]);
+
             reader.onload = function(e) {
                 $("#img-original").attr("src", e.target.result);
-             originalFaceId=  getFaceId(input.files[0]);
-                console.log(originalFaceId);
-               //addToFacelist(input.files[0]);
+                getFaceId(input.files[0]);
+                originalImage = input.files[0];
+                console .log("this");
             };
 
+           
+           
+            console .log("that");
+
         }
+       console .log("that too");
+
     }
 
-    // $("#imgCompare").click();
-
-    function readCompareUrl(input) {
+   function readCompareUrl(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function(e) {
                 $("#img-compare").attr("src", e.target.result);
-                 getFaceId(input.files[0]);                
+                getFaceId(input.files[0]);
             };
             reader.readAsDataURL(input.files[0]);
 
         }
     }
-
-
+    
     $("#imgInp").change(function() {
         readOriginalUrl(this);
     });

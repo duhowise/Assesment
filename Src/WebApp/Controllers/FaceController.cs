@@ -77,6 +77,24 @@ namespace WebApp.Controllers
             }
         }
         
+        
+        [HttpPut]
+       [Route("persongroups/{personGroupId}")] public async Task<IActionResult> Persongroups(string personGroupId)
+        {
+            
+            try
+            {
+                var url = new Url($"https://westcentralus.api.cognitive.microsoft.com/face/v1.0/persongroups/{personGroupId}");
+                await url.WithHeader("Ocp-Apim-Subscription-Key", "1c8723038192418da1e15f8a1f052a9e")
+                   .PutJsonAsync(new{name=personGroupId,userData="Test for comparism"});
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Ok(e);
+            }
+        }
+        
         [HttpGet]
        [Route("facelist/{name}")] public async Task<IActionResult> GetFacelist(string name)
         {
