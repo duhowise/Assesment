@@ -1,7 +1,7 @@
 ﻿// Write your Javascript code.
 var validIds=[];
 var originalImage = null;
-
+var OriginalId = null;
 $(document).ready(function() {
     var compareFaceId = null;
     $(document).on("change",
@@ -47,14 +47,13 @@ $(document).ready(function() {
                 return data.json();
             }).then(function(json) {
                 // var result= JSON.stringify(json);
-                    json.forEach(element => {
-                validIds.push(element.faceId);
+                json.forEach(element => {
+                        validIds.push(element.faceId);
                         
                     });
-
-
                 console.log(validIds);
-
+ 
+                
 
             })
             .catch(function(error) {
@@ -71,7 +70,7 @@ $(document).ready(function() {
                     "Content-Type": "application/json",
                     "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
                 },
-                body: JSON.stringify({faceId1:valids[1], faceId2:valids[2],faceId:valids[0],personGroupId:"aweome_face_list"})
+                body:JSON.stringify({faceId:valids[1], personId:valids[0]})
             })
             .then(function(data) {
                 console.log("Request success: ", data);
@@ -143,15 +142,9 @@ $(document).ready(function() {
                 $("#img-original").attr("src", e.target.result);
                 getFaceId(input.files[0]);
                 originalImage = input.files[0];
-                console .log("this");
             };
-
-           
-           
-            console .log("that");
-
+            
         }
-       console .log("that too");
 
     }
 
