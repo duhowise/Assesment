@@ -70,7 +70,7 @@ $(document).ready(function() {
                     "Content-Type": "application/json",
                     "Ocp-Apim-Subscription-Key":"1c8723038192418da1e15f8a1f052a9e"
                 },
-                body:JSON.stringify({faceId:valids[1], personId:valids[0]})
+                body:JSON.stringify({faceId:valids[2], personId:valids[0],personGroupId:"aweome_face_list"})
             })
             .then(function(data) {
                 console.log("Request success: ", data);
